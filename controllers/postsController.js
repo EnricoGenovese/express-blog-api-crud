@@ -79,13 +79,19 @@ function modify(req, res) {
 
 function destroy(req, res) {
     const id = parseInt(req.params.id);
-    const post = posts.find((post) => post.id === id);
-    if (post) {
-        res.send(`Item ${id} destroyed`)
+    const index = posts.findIndex(item => item.id === id);
+    if (index !== 1) {
+        posts.splice(index, 1);
+        console.log(posts);
+        res.status(204) // --> no content
     } else { // --> if post does not exist
-        res.send("Cannot destroy what does not exist")
-    }
-}
+        res.status(404);
+        res.json({
+            error: 404,
+            message: "Cannot destroy what does not exist"
+        });
+    };
+};
 
 module.exports = {
     index,
