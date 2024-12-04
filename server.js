@@ -9,7 +9,7 @@ const postsRouter = require("./routers/postsRouter.js");
 
 app.get("/", (req, res) => {
     res.send("<h1>Server del mio blog</h1>")
-})
+});
 
 app.use("/posts", postsRouter);
 
@@ -19,4 +19,4 @@ app.all("*", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-})
+});
