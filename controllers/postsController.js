@@ -5,14 +5,19 @@ Poi torniamo sul file delle rotte. Qui importiamo le funzioni dichiarate nel con
 Testiamo su postman se chiamando gli endpoint riceviamo effettivamente le stesse risposte che avevamo prima.
 Se tutto funziona, passiamo alla prossima milestone
 */
+/*
+### Bonus
+- Implementare un filtro di ricerca nella index che mostri solo i post che hanno un determinato Tag
+- In Show e Destroy, controllare se il parametro si riferisce ad un post esistente, in caso contrario, rispondere con uno stato 404 e un messaggio d’errore, sempre in formato JSON.
+-Create router, controller e model per un'altra risorsa a vostra discrezione (es. commenti, utenti, ...)
+*/
 
-const posts = require("../models/posts.js") // --> link to the db folder; export the one needed
+const posts = require("../models/posts.js") // --> link to the models folder; export the one needed
 
 // Funzioni
 
 function index(req, res) {
     const postTitle = req.query.title; // --> query string: .../posts?title=[title or part of title]
-    console.log(postTitle);
     //
     let response = {
         totalPosts: posts.length,
@@ -81,11 +86,11 @@ function destroy(req, res) {
     const id = parseInt(req.params.id);
     const index = posts.findIndex(item => item.id === id);
     if (index !== -1) {
-        res.status(204) // --> no content
         posts.splice(index, 1);
+        res.sendStatus(204) // --> no content
         console.log(posts);
     } else { // --> if post does not exist
-        res.status(404);
+        res.send(404);
         res.json({
             error: 404,
             message: "Cannot destroy what does not exist"
