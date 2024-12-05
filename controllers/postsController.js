@@ -60,7 +60,26 @@ function show(req, res) {  // --> @ .../posts/[id]
 };
 
 function store(req, res) {
-    res.send("New post created!");
+    let newId = 0;
+    for (let i = 0; i < posts.length; i++) {
+        if (posts[i].id > newId) {
+            newId = posts[i].id
+        };
+    };
+    newId += 1;
+    //
+    // console.log(req.headers["content-type"]);
+    //
+    const newPost = {
+        id: newId,
+        title: req.body.title,          // "title": "Crostata integrale ai mirtilli",
+        content: req.body.content,      // "content": "Per una dolce pausa",
+        img: req.body.img,              // "img": "../pubic/images/crostata_integrale_mirtilli",
+        tags: req.body.tags             // "tags": ["estate, frutta, integrale"]
+    };
+    posts.push(newPost);
+    console.log(posts);
+    res.json(newPost);
 };
 
 function update(req, res) {
