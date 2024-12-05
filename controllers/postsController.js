@@ -79,17 +79,27 @@ function store(req, res) {
     };
     posts.push(newPost);
     console.log(posts);
-    res.json(newPost);
+    res.status(201).json(newPost);
 };
 
 function update(req, res) {
     const id = parseInt(req.params.id);
     const post = posts.find((post) => post.id === id);
-    if (post) {
-        res.send("Item fully modified");
-    } else {    // --> if post does not exist
-        res.send("Cannot update what doe not exist")
+    if (!post) {
+        res.status(404).json({ success: false, message: "The post does not exist" })
+        return;
     }
+    // post.title = req.body.title;
+    // post.content = req.body.content;
+    // post.img = req.body.tags;
+    // post.tags = req.body.tags;
+    for (key in post) {
+        if (key !== "id") {
+            post[key] = req.body[key];
+        }
+    }
+    console.log(posts);
+    res.json(post);
 };
 
 function modify(req, res) {
