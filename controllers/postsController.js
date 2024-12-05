@@ -12,12 +12,13 @@ Se tutto funziona, passiamo alla prossima milestone
 -Create router, controller e model per un'altra risorsa a vostra discrezione (es. commenti, utenti, ...)
 */
 
-const posts = require("../models/posts.js") // --> link to the models folder; export the one needed
+const posts = require("../models/post.js") // --> link to the models folder; export the one needed
 
 // Funzioni
 
 function index(req, res) {
     const postTitle = req.query.title; // --> query string: .../posts?title=[title or part of title]
+    // const postTag = req.query.tag;
     //
     let response = {
         totalPosts: posts.length,
@@ -36,7 +37,7 @@ function index(req, res) {
                 message: "Post not found",
             };
         }
-    }
+    };
     res.json(response);
 };
 
@@ -49,6 +50,7 @@ function show(req, res) {  // --> @ .../posts/[id]
             success: true,
             post,
         });
+        //
     } else {    // --> if post does not exist
         res.json({
             success: false,
@@ -85,12 +87,14 @@ function modify(req, res) {
 function destroy(req, res) {
     const id = parseInt(req.params.id);
     const index = posts.findIndex(item => item.id === id);
+    //
     if (index !== -1) {
         posts.splice(index, 1);
         res.sendStatus(204) // --> no content
         console.log(posts);
+        //
     } else { // --> if post does not exist
-        res.send(404);
+        res.status(404);
         res.json({
             error: 404,
             message: "Cannot destroy what does not exist"
